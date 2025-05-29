@@ -1,13 +1,16 @@
 package com.amhue.hman;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.util.Objects;
 
 @Entity
-public class User {
+public class Users {
     @Id
+    @GeneratedValue
     private Integer id;
     private String name;
     private String email;
@@ -15,7 +18,7 @@ public class User {
 
     private boolean isMgmt;
 
-    public User() {
+    public Users() {
 
     }
 
@@ -62,8 +65,8 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return isMgmt == user.isMgmt && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone);
+        Users users = (Users) o;
+        return isMgmt == users.isMgmt && Objects.equals(id, users.id) && Objects.equals(name, users.name) && Objects.equals(email, users.email) && Objects.equals(phone, users.phone);
     }
 
     @Override
@@ -71,7 +74,7 @@ public class User {
         return Objects.hash(id, name, email, phone, isMgmt);
     }
 
-    public User(String name, String email, String phone, boolean isMgmt) {
+    public Users(String name, String email, String phone, boolean isMgmt) {
         this.name = name;
         this.email = email;
         this.phone = phone;

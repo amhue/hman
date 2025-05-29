@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Table {
+public class TableBooking {
     @Id
     @GeneratedValue
     private Integer id;
@@ -20,7 +20,7 @@ public class Table {
     @ManyToOne
     private Room room;
 
-    public Table() {
+    public TableBooking() {
 
     }
 
@@ -59,8 +59,8 @@ public class Table {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Table table = (Table) o;
-        return charge == table.charge && Objects.equals(id, table.id) && Objects.equals(time, table.time) && Objects.equals(room, table.room);
+        TableBooking tableBooking = (TableBooking) o;
+        return charge == tableBooking.charge && Objects.equals(id, tableBooking.id) && Objects.equals(time, tableBooking.time) && Objects.equals(room, tableBooking.room);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Table {
         return Objects.hash(id, time, charge, room);
     }
 
-    public Table(Integer id) {
+    public TableBooking(Integer id) {
         this.id = id;
     }
 }

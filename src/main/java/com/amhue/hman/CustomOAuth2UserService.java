@@ -4,13 +4,14 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 
-public class MyOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+@Service
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UsersRepository usersRepository;
 
-    public MyOAuth2UserService(UsersRepository usersRepository) {
+    public CustomOAuth2UserService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -22,7 +23,6 @@ public class MyOAuth2UserService implements OAuth2UserService<OAuth2UserRequest,
         String name = oAuth2User.getAttribute("name");
 
         System.out.println("Google Login - Email: " + email + ", Name: " + name); // DEBUG
-
 
         usersRepository.findByEmail(email)
                 .orElseGet(() -> {
