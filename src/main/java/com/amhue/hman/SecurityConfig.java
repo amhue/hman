@@ -12,7 +12,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(
-                auth -> auth.requestMatchers("/login").permitAll().anyRequest().authenticated()
+                auth -> auth.requestMatchers("/login", "/user/user", "/user").permitAll().anyRequest().authenticated()
         ).oauth2Login(
                 oauth -> oauth.loginPage("/login").defaultSuccessUrl("/", true)
         ).logout(logout -> logout.logoutSuccessUrl("/login"));

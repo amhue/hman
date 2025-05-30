@@ -7,10 +7,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UsersRepository usersRepository;
 
-    public OAuth2UserService(UsersRepository usersRepository) {
+    public CustomOAuth2UserService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -27,7 +27,7 @@ public class OAuth2UserService implements org.springframework.security.oauth2.cl
                 .orElseGet(() -> {
                     System.out.println("Ok");
                     Users user = new Users();
-                    user.setMgmt(false);
+                    user.setMgmt(email != null && email.endsWith("@nitdgp.ac.in"));
                     user.setName(name);
                     user.setEmail(email);
                     return usersRepository.save(user);

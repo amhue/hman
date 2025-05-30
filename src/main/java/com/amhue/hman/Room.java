@@ -23,6 +23,8 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<TableBooking> tableBookings;
 
+    RoomType roomType;
+
     public Room() {
 
     }
@@ -67,32 +69,41 @@ public class Room {
         this.bills = bills;
     }
 
-    public List<TableBooking> getTables() {
+    public List<TableBooking> getTableBookings() {
         return tableBookings;
     }
 
-    public void setTables(List<TableBooking> tableBookings) {
+    public void setTableBookings(List<TableBooking> tableBookings) {
         this.tableBookings = tableBookings;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return isOccupied == room.isOccupied && Objects.equals(id, room.id) && Objects.equals(room_number, room.room_number) && Objects.equals(customer, room.customer) && Objects.equals(bills, room.bills) && Objects.equals(tableBookings, room.tableBookings);
+        return isOccupied == room.isOccupied && Objects.equals(id, room.id) && Objects.equals(room_number, room.room_number) && Objects.equals(customer, room.customer) && Objects.equals(bills, room.bills) && Objects.equals(tableBookings, room.tableBookings) && roomType == room.roomType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, room_number, isOccupied, customer, bills, tableBookings);
+        return Objects.hash(id, room_number, isOccupied, customer, bills, tableBookings, roomType);
     }
 
-    public Room(Integer id, Integer room_number, boolean isOccupied, Users customer, List<Bill> bills, List<TableBooking> tableBookings) {
+    public Room(Integer id, Integer room_number, boolean isOccupied, Users customer, List<Bill> bills, List<TableBooking> tableBookings, RoomType roomType) {
         this.id = id;
         this.room_number = room_number;
         this.isOccupied = isOccupied;
         this.customer = customer;
         this.bills = bills;
         this.tableBookings = tableBookings;
+        this.roomType = roomType;
     }
 }
