@@ -1,75 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        :root {
-            --darker-black: #1a1a1a;
-            --lighter-black: #343434;
-            --darker-grey: #3b3b3b;
-            --lighter-grey: #555555;
-            --lightest-grey: #cccccc;
-            --white: #fffeee;
-        }
-
-        * {
-            font-family:
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    Roboto,
-                    Oxygen,
-                    Ubuntu,
-                    Cantarell,
-                    "Open Sans",
-                    "Helvetica Neue",
-                    sans-serif;
-        }
-
-        body {
-            background: var(--darker-grey);
-            color: var(--white);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        button {
-            color: var(--white);
-            background-color: #c34343;
-            border: var(--white) 2px solid;
-            border-radius: 10px;
-            font-size: 1.2em;
-            padding: 0.2em 0.3em 0.4em 0.3em;
-        }
-
-        .button-container {
-            background-color: var(--lighter-black);
-            position: relative;
-            display: flex;
-            width: 18em;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--lightest-grey);
-            border-radius: 10px;
-            height: 9em;
-        }
-    </style>
+    <link th:href="@{/styles/root.css}" rel="stylesheet">
     <meta charset="UTF-8">
     <title>hman</title>
+    <script th:src="@{/scripts/room.js}" type="text/javascript"></script>
 </head>
 <body>
-<h1>You are now logged in!</h1>
-<div class="button-container">
-    <form th:action="@{/logout}" method="post">
-        <button class="logout-btn" type="submit">Logout</button>
-    </form>
-</div>
+<h1 th:text="${name}"></h1>
 </body>
 </html>

@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface RoomRepository
         extends JpaRepository<Room, Integer> {
-    List<Room> findByOccupiedIs(boolean occupied);
+    List<Room> findByIsOccupied(boolean occupied);
     Optional<Room> findById(Integer id);
 }

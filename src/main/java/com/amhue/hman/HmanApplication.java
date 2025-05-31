@@ -16,9 +16,9 @@ public class HmanApplication {
 
     @GetMapping("/")
     public String root(Model model, OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-        String user = oAuth2AuthenticationToken.getPrincipal().getAttribute("name");
+        String name = oAuth2AuthenticationToken.getPrincipal().getAttribute("name");
         System.out.println();
-        model.addAttribute("name", user);
+        model.addAttribute("name", "Welcome, " + name);
         return "root";
     }
 }

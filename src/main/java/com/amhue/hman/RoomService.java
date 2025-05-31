@@ -17,12 +17,16 @@ public class RoomService {
     }
 
     public List<Room> getFreeRooms() {
-        return roomRepository.findByOccupiedIs(false);
+        return roomRepository.findByIsOccupied(false);
     }
 
     public void freeRoom(Integer id) {
         roomRepository.findById(id).ifPresent(room -> {
             room.setOccupied(false);
         });
+    }
+
+    public void addRoom(Room room) {
+        roomRepository.save(room);
     }
 }
