@@ -1,4 +1,4 @@
-package com.amhue.hman;
+package com.amhue.hman.Controllers;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

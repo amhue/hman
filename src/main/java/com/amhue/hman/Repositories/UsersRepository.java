@@ -1,5 +1,6 @@
-package com.amhue.hman;
+package com.amhue.hman.Repositories;
 
+import com.amhue.hman.Entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

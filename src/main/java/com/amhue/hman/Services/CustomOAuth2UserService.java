@@ -1,5 +1,7 @@
-package com.amhue.hman;
+package com.amhue.hman.Services;
 
+import com.amhue.hman.Entities.Users;
+import com.amhue.hman.Repositories.UsersRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

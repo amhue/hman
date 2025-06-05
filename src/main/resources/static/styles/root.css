@@ -41,6 +41,18 @@ h1 {
     border: 2px solid var(--lightest-grey);
     border-radius: 10px;
     padding: 1em;
+    background-color: var(--lighter-black);
+}
+
+footer {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    color: var(--white);
+}
+
+footer>a:visited {
+    color: var(--white);
 }
 
 #rooms {

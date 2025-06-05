@@ -1,5 +1,7 @@
-package com.amhue.hman;
+package com.amhue.hman.Controllers;
 
+import com.amhue.hman.Entities.Room;
+import com.amhue.hman.Services.RoomService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
-    private RoomService roomService;
+    private final RoomService roomService;
 
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
@@ -16,11 +18,6 @@ public class RoomController {
     @GetMapping
     public List<Room> getRooms() {
         return roomService.getRooms();
-    }
-
-    @GetMapping("free")
-    public List<Room> getFreeRooms() {
-        return roomService.getFreeRooms();
     }
 
     @PostMapping

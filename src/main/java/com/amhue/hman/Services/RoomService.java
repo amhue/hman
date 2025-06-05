@@ -1,5 +1,7 @@
-package com.amhue.hman;
+package com.amhue.hman.Services;
 
+import com.amhue.hman.Entities.Room;
+import com.amhue.hman.Repositories.RoomRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,16 +16,6 @@ public class RoomService {
 
     public List<Room> getRooms() {
         return roomRepository.findAll();
-    }
-
-    public List<Room> getFreeRooms() {
-        return roomRepository.findByIsOccupied(false);
-    }
-
-    public void freeRoom(Integer id) {
-        roomRepository.findById(id).ifPresent(room -> {
-            room.setOccupied(false);
-        });
     }
 
     public void addRoom(Room room) {

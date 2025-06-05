@@ -1,5 +1,6 @@
-package com.amhue.hman;
+package com.amhue.hman.Entities;
 
+import com.amhue.hman.RoomType;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,11 +12,10 @@ public class Room {
     @GeneratedValue
     private Integer id;
 
-    private Integer room_number;
-    private boolean isOccupied;
+    private Integer roomNumber;
 
-    @ManyToOne
-    private Users customer;
+    @OneToMany
+    private List<Booking> booking;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Bill> bills;
@@ -38,28 +38,20 @@ public class Room {
         this.id = id;
     }
 
-    public Integer getRoom_number() {
-        return room_number;
+    public Integer getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setRoom_number(Integer room_number) {
-        this.room_number = room_number;
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
-    public boolean isOccupied() {
-        return isOccupied;
+    public List<Booking> getRoomDate() {
+        return booking;
     }
 
-    public void setOccupied(boolean occupied) {
-        isOccupied = occupied;
-    }
-
-    public Users getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Users customer) {
-        this.customer = customer;
+    public void setRoomDate(List<Booking> booking) {
+        this.booking = booking;
     }
 
     public List<Bill> getBills() {
@@ -90,19 +82,18 @@ public class Room {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return isOccupied == room.isOccupied && Objects.equals(id, room.id) && Objects.equals(room_number, room.room_number) && Objects.equals(customer, room.customer) && Objects.equals(bills, room.bills) && Objects.equals(tableBookings, room.tableBookings) && roomType == room.roomType;
+        return Objects.equals(id, room.id) && Objects.equals(roomNumber, room.roomNumber) && Objects.equals(booking, room.booking) && Objects.equals(bills, room.bills) && Objects.equals(tableBookings, room.tableBookings) && roomType == room.roomType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, room_number, isOccupied, customer, bills, tableBookings, roomType);
+        return Objects.hash(id, roomNumber, booking, bills, tableBookings, roomType);
     }
 
-    public Room(Integer id, Integer room_number, boolean isOccupied, Users customer, List<Bill> bills, List<TableBooking> tableBookings, RoomType roomType) {
+    public Room(Integer id, Integer roomNumber, List<Booking> booking, List<Bill> bills, List<TableBooking> tableBookings, RoomType roomType) {
         this.id = id;
-        this.room_number = room_number;
-        this.isOccupied = isOccupied;
-        this.customer = customer;
+        this.roomNumber = roomNumber;
+        this.booking = booking;
         this.bills = bills;
         this.tableBookings = tableBookings;
         this.roomType = roomType;

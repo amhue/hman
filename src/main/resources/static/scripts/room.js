@@ -10,7 +10,7 @@ async function getRooms() {
             const roomDiv = roomsContainer
                 .appendChild(document.createElement("div"));
             roomDiv
-                .innerHTML = `Room number: ${room.room_number}<br />
+                .innerHTML = `Room number: ${room.roomNumber}<br />
                     Room type: ${room.roomType}<br />
                     ${room.occupied ? "Not available" : "Available"}`;
             roomDiv.className = "room"
