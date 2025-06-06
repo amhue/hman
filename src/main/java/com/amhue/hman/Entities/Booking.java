@@ -1,8 +1,12 @@
 package com.amhue.hman.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,14 +15,19 @@ public class Booking {
     @GeneratedValue
     private Integer id;
 
-    @OneToOne
+    @ManyToOne
     private Users users;
 
     private LocalDate startDate;
     private LocalDate endDate;
 
     @ManyToOne
+    @JsonBackReference
     private Room room;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<Bill> bills;
 
     public Booking() {
 
@@ -64,6 +73,14 @@ public class Booking {
         this.room = room;
     }
 
+    public List<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(List<Bill> bills) {
+        this.bills = bills;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -76,11 +93,12 @@ public class Booking {
         return Objects.hash(id, users, startDate, endDate, room);
     }
 
-    public Booking(Integer id, Users users, LocalDate startDate, LocalDate endDate, Room room) {
+    public Booking(Integer id, Users users, LocalDate startDate, LocalDate endDate, Room room, List<Bill> bills) {
         this.id = id;
         this.users = users;
         this.startDate = startDate;
         this.endDate = endDate;
         this.room = room;
+        this.bills = bills;
     }
 }

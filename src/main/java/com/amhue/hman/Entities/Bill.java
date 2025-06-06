@@ -1,9 +1,8 @@
 package com.amhue.hman.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.Objects;
 
@@ -17,7 +16,8 @@ public class Bill {
     private Integer amount;
 
     @ManyToOne
-    private Room room;
+    @JsonBackReference
+    private Booking booking;
 
     public Bill() {
 
@@ -47,30 +47,30 @@ public class Bill {
         this.amount = amount;
     }
 
-    public Room getRoom() {
-        return room;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Bill bill = (Bill) o;
-        return Objects.equals(id, bill.id) && Objects.equals(billType, bill.billType) && Objects.equals(amount, bill.amount) && Objects.equals(room, bill.room);
+        return Objects.equals(id, bill.id) && Objects.equals(billType, bill.billType) && Objects.equals(amount, bill.amount) && Objects.equals(booking, bill.booking);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, billType, amount, room);
+        return Objects.hash(id, billType, amount, booking);
     }
 
-    public Bill(Integer id, String billType, Integer amount, Room room) {
+    public Bill(Integer id, String billType, Integer amount, Booking booking) {
         this.id = id;
         this.billType = billType;
         this.amount = amount;
-        this.room = room;
+        this.booking = booking;
     }
 }

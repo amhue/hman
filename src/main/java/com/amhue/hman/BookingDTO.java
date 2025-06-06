@@ -3,14 +3,24 @@ package com.amhue.hman;
 import java.time.LocalDate;
 
 public class BookingDTO {
+    private Integer userID;
     private Integer roomNo;
     private LocalDate start;
     private LocalDate end;
 
-    public BookingDTO(Integer roomNo, LocalDate start, LocalDate end) {
+    public BookingDTO(Integer userID, Integer roomNo, LocalDate start, LocalDate end) {
+        this.userID = userID;
         this.roomNo = roomNo;
         this.start = start;
         this.end = end;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public Integer getRoomNo() {

@@ -1,6 +1,7 @@
 package com.amhue.hman.Services;
 
 import com.amhue.hman.Entities.Booking;
+import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.BookingRepository;
 import com.amhue.hman.Entities.Room;
 import org.springframework.stereotype.Service;
@@ -21,17 +22,24 @@ public class BookingService {
         return overlap.isEmpty();
     }
 
-    public Booking bookRoom(Room room, LocalDate start, LocalDate end) {
+    public Booking bookRoom(Users user, Room room, LocalDate start, LocalDate end) {
         if (!isAvailable(room, start, end)) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException("Room is not available!");
+        }
+
+        if (user.isMgmt()) {
+            throw new IllegalStateException("User is not a customer!");
         }
 
         Booking booking = new Booking();
+        booking.setUsers(user);
         booking.setRoom(room);
         booking.setStartDate(start);
         booking.setEndDate(end);
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+
+        return booking;
     }
 
     public List<Booking> getAllBookings() {
