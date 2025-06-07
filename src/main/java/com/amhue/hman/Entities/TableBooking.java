@@ -1,9 +1,7 @@
 package com.amhue.hman.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,11 +12,14 @@ public class TableBooking {
     @GeneratedValue
     private Integer id;
 
-    private LocalDateTime time;
-    private int charge;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    private Integer amount;
 
     @ManyToOne
-    private Room room;
+    @JsonBackReference
+    private Booking booking;
 
     public TableBooking() {
 
@@ -32,43 +33,55 @@ public class TableBooking {
         this.id = id;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public int getCharge() {
-        return charge;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setCharge(int charge) {
-        this.charge = charge;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
-    public Room getRoom() {
-        return room;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        TableBooking tableBooking = (TableBooking) o;
-        return charge == tableBooking.charge && Objects.equals(id, tableBooking.id) && Objects.equals(time, tableBooking.time) && Objects.equals(room, tableBooking.room);
+        TableBooking that = (TableBooking) o;
+        return Objects.equals(id, that.id) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime) && Objects.equals(amount, that.amount) && Objects.equals(booking, that.booking);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, time, charge, room);
+        return Objects.hash(id, startTime, endTime, amount, booking);
     }
 
-    public TableBooking(Integer id) {
+    public TableBooking(Integer id, LocalDateTime startTime, LocalDateTime endTime, Integer amount, Booking booking) {
         this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.amount = amount;
+        this.booking = booking;
     }
 }

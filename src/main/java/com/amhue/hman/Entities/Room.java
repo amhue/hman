@@ -13,6 +13,7 @@ public class Room {
     @GeneratedValue
     private Integer id;
 
+    @Column(unique = true)
     private Integer roomNumber;
 
     @OneToMany
