@@ -2,10 +2,7 @@ package com.amhue.hman.Controllers;
 
 import com.amhue.hman.Entities.Table;
 import com.amhue.hman.Services.TableService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class TableController {
     }
 
     @PostMapping
-    public void addTable(Table table) {
+    public void addTable(@RequestBody Table table) {
         tableService.addTable(table);
     }
 }

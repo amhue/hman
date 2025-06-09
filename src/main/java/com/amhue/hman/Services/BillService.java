@@ -22,8 +22,12 @@ public class BillService {
         bill.setAmount(amount);
         bill.setBooking(booking);
 
-        List<Bill> bills = new ArrayList<>();
+        List<Bill> bills = booking.getBills();
+        if (bills == null) {
+            bills = new ArrayList<>();
+        }
         bills.add(bill);
+        System.out.println(bills);
         booking.setBills(bills);
 
         billRepository.save(bill);

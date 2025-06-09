@@ -16,7 +16,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                 auth -> auth.
-                        requestMatchers("/login", "/api/rooms", "/api/booking", "/api/users", "/api/table")
+                        requestMatchers("/login", "/api/rooms", "/api/booking", "/api/users", "/api/table", "/api/table-booking")
                         .permitAll()
                         .anyRequest().authenticated()
         ).oauth2Login(

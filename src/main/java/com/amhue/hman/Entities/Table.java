@@ -1,10 +1,10 @@
 package com.amhue.hman.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +15,12 @@ public class Table {
     @GeneratedValue
     private Integer id;
 
-    @OneToMany
-    @JsonManagedReference
+    @OneToMany(mappedBy = "table")
+    @JsonIgnoreProperties("table")
+    @Cascade(CascadeType.ALL)
     private List<TableBooking> tableBookings;
 
+    @Column(unique = true)
     private Integer tableNumber;
 
     public Table() {
