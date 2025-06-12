@@ -2,8 +2,10 @@ package com.amhue.hman.Controllers;
 
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.UsersRepository;
-import com.amhue.hman.Services.UserService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
@@ -11,11 +13,9 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
     private final UsersRepository usersRepository;
-    private final UserService userService;
 
-    public UserController(UsersRepository usersRepository, UserService userService) {
+    public UserController(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -27,10 +27,5 @@ public class UserController {
         } else {
             return user.get();
         }
-    }
-
-    @PostMapping("/add")
-    public void addUser(@RequestBody Users user) {
-        userService.addUser(user);
     }
 }
