@@ -1,13 +1,15 @@
 package com.amhue.hman.Services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.amhue.hman.Entities.Booking;
+import com.amhue.hman.Entities.Room;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.BookingRepository;
-import com.amhue.hman.Entities.Room;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BookingService {
@@ -18,11 +20,15 @@ public class BookingService {
     }
 
     public boolean isAvailable(Room room, LocalDate start, LocalDate end) {
-        List<Booking> overlap = bookingRepository.findByRoomAndEndDateGreaterThanEqualAndStartDateLessThanEqual(room, start, end);
+        List<Booking> overlap =
+            bookingRepository
+                .findByRoomAndEndDateGreaterThanAndStartDateLessThan(
+                    room, start, end);
         return overlap.isEmpty();
     }
 
-    public Booking bookRoom(Users user, Room room, LocalDate start, LocalDate end) {
+    public Booking bookRoom(Users user, Room room, LocalDate start,
+                            LocalDate end) {
         if (!isAvailable(room, start, end)) {
             throw new IllegalStateException("Room is not available!");
         }
@@ -36,6 +42,12 @@ public class BookingService {
         booking.setRoom(room);
         booking.setStartDate(start);
         booking.setEndDate(end);
+
+        List<Booking> bookings = user.getBookings();
+        if (bookings == null) {
+            bookings = new ArrayList<>();
+        }
+        bookings.add(booking);
 
         bookingRepository.save(booking);
 

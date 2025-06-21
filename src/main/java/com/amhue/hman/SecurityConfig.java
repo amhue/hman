@@ -11,17 +11,24 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                auth -> auth.
-                        requestMatchers("/login", "/api/rooms", "/api/booking", "/api/users", "/api/table", "/api/table-booking")
-                        .permitAll()
-                        .anyRequest().authenticated()
-        ).oauth2Login(
-                oauth -> oauth.loginPage("/login").defaultSuccessUrl("/", true)
-        ).logout(logout -> logout.logoutSuccessUrl("/login"));
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
+        throws Exception {
+        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(
+                auth
+                -> auth.requestMatchers("/login", "/api/rooms", "/api/booking",
+                                        "/api/users", "/api/table",
+                                        "/api/table-booking", "/api/users/*",
+                                        "/api/rooms/*", "/api/table/*")
+                       .permitAll()
+                       .anyRequest()
+                       .authenticated())
+            .oauth2Login(oauth
+                         -> oauth.loginPage("/login").defaultSuccessUrl(
+                             "http://localhost:5173", true))
+            .logout(logout
+                    -> logout.logoutSuccessUrl("http://localhost:5173/login")
+                           .logoutUrl("/logout"));
         System.out.println("Hello");
         return httpSecurity.build();
     }

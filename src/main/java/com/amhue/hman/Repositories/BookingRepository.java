@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    List<Booking> findByRoomAndEndDateGreaterThanEqualAndStartDateLessThanEqual(Room room, LocalDate start, LocalDate end);
+    List<Booking> findByRoomAndEndDateGreaterThanAndStartDateLessThan(
+        Room room, LocalDate start, LocalDate end);
     Optional<Booking> findById(@NonNull Integer id);
 }
