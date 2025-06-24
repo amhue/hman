@@ -24,10 +24,12 @@ public class TableService {
 
     public List<Table> getTables() { return tableRepository.findAll(); }
 
-    public List<Table> searchTables(LocalDateTime start, LocalDateTime end) {
+    public List<Table> searchTables(LocalDateTime start, LocalDateTime end,
+                                    Integer capacity) {
         return tableRepository.findAll()
             .stream()
             .filter(table -> tableBookingService.isAvailable(table, start, end))
+            .filter(table -> table.getCapacity() == capacity)
             .collect(Collectors.toList());
     }
 }

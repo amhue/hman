@@ -14,8 +14,13 @@ import com.amhue.hman.Repositories.RoomRepository;
 import com.amhue.hman.Repositories.UsersRepository;
 import com.amhue.hman.Services.BillService;
 import com.amhue.hman.Services.BookingService;
+import com.amhue.hman.Services.UsersService;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,15 +33,18 @@ public class BookingController {
     private final RoomRepository roomRepository;
     private final UsersRepository usersRepository;
     private final BillService billService;
+    public final UsersService usersService;
 
     public BookingController(BookingService bookingService,
                              RoomRepository roomRepository,
                              UsersRepository usersRepository,
-                             BillService billService) {
+                             BillService billService,
+                             UsersService usersService) {
         this.bookingService = bookingService;
         this.roomRepository = roomRepository;
         this.usersRepository = usersRepository;
         this.billService = billService;
+        this.usersService = usersService;
     }
 
     @PostMapping
@@ -62,7 +70,11 @@ public class BookingController {
                 case DELUXE -> 2500;
             } * daysBooked;
 
-            billService.addBill("Accommodation cost", roomPrice, booking);
+            billService.addBill(
+                "Accommodation cost " +
+                    bookingDTO.getStart().atStartOfDay().toLocalDate() + " - " +
+                    bookingDTO.getEnd().atStartOfDay().toLocalDate(),
+                roomPrice, booking);
 
             List<Booking> bookings = room.get().getBooking();
             if (bookings == null) {
@@ -77,5 +89,20 @@ public class BookingController {
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
+    }
+
+    @DeleteMapping("/{id}")
+    public List<BookingDTO>
+    deleteBooking(@AuthenticationPrincipal OAuth2User oAuth2User,
+                  @PathVariable Integer id) {
+        String email = oAuth2User.getAttribute("email");
+        Optional<Users> user = usersRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            throw new IllegalStateException("User with email " + email +
+                                            " not found!");
+        }
+        bookingService.deleteBooking(id);
+        return usersService.getUpcomingBookings(user.get());
     }
 }

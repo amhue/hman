@@ -3,6 +3,7 @@ package com.amhue.hman.Entities;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,7 +18,9 @@ public class Users {
 
     private boolean isMgmt;
 
-    @OneToMany private List<Booking> bookings;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<Booking> bookings;
 
     public Users() {}
 

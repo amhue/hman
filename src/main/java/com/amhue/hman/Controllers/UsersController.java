@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.amhue.hman.BookingDTO;
+import com.amhue.hman.TableBookingDTO;
+import com.amhue.hman.Entities.Bill;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.UsersRepository;
 import com.amhue.hman.Services.UsersService;
@@ -103,5 +105,28 @@ public class UsersController {
                                             oAuth2User.getAttribute("email"));
         }
         return usersService.getPastBookings(user.get());
+    }
+
+    @GetMapping("/tables")
+    public List<TableBookingDTO>
+    getTables(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        Optional<Users> user =
+            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+        if (user.isEmpty()) {
+            throw new IllegalStateException("User not found! " +
+                                            oAuth2User.getAttribute("email"));
+        }
+        return usersService.getTables(user.get());
+    }
+
+    @GetMapping("/bills")
+    public List<Bill> getBills(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        Optional<Users> user =
+            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+        if (user.isEmpty()) {
+            throw new IllegalStateException("User not found!" +
+                                            oAuth2User.getAttribute("email"));
+        }
+        return usersService.getBills(user.get());
     }
 }

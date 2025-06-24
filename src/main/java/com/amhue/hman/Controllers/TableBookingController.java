@@ -55,10 +55,12 @@ public class TableBookingController {
                        tableBookingDTO.getStartTime())) {
             throw new IllegalStateException("End time is before start time!");
         } else if (tableBookingDTO.getStartTime().isBefore(
-                       booking.get().getStartDate().atTime(12, 0)) &&
+                       booking.get().getStartDate().atTime(6, 59)) ||
                    tableBookingDTO.getEndTime().isAfter(
-                       booking.get().getEndDate().atTime(12, 0))) {
-            throw new IllegalStateException("The given timing is not booked!");
+                       booking.get().getEndDate().atTime(7, 0))) {
+            throw new IllegalStateException(
+                "The table booking time must fall within the booking date "
+                + "range.");
         } else {
             tableBookingService.addTableBooking(
                 tableBookingDTO.getStartTime(), tableBookingDTO.getEndTime(),

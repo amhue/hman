@@ -29,8 +29,9 @@ public class TableController {
 
     @GetMapping("/search")
     public List<Table> searchTables(@RequestParam LocalDateTime start,
-                                    @RequestParam LocalDateTime end) {
-        return tableService.searchTables(start, end);
+                                    @RequestParam LocalDateTime end,
+                                    @RequestParam Integer capacity) {
+        return tableService.searchTables(start, end, capacity);
     }
 
     @PostMapping

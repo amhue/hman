@@ -11,6 +11,8 @@ import com.amhue.hman.Repositories.BookingRepository;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
@@ -56,5 +58,10 @@ public class BookingService {
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteBooking(Integer id) {
+        bookingRepository.deleteById(id);
     }
 }
