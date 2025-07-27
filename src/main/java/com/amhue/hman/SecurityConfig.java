@@ -19,7 +19,8 @@ public class SecurityConfig {
                 -> auth.requestMatchers("/login", "/api/rooms", "/api/booking",
                                         "/api/users", "/api/table",
                                         "/api/table-booking", "/api/users/*",
-                                        "/api/rooms/*", "/api/table/*")
+                                        "/api/rooms/*", "/api/table/*", "/api/admin/*",
+                                        "/api/admin")
                        .permitAll()
                        .anyRequest()
                        .authenticated())

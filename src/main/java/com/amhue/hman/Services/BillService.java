@@ -1,12 +1,14 @@
 package com.amhue.hman.Services;
 
-import com.amhue.hman.Entities.Bill;
-import com.amhue.hman.Entities.Booking;
-import com.amhue.hman.Repositories.BillRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.amhue.hman.Entities.Bill;
+import com.amhue.hman.Entities.Booking;
+import com.amhue.hman.Entities.Users;
+import com.amhue.hman.Repositories.BillRepository;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class BillService {
@@ -31,5 +33,11 @@ public class BillService {
         booking.setBills(bills);
 
         billRepository.save(bill);
+    }
+
+    public List<Bill> getBills() { return billRepository.findAll(); }
+
+    public List<Bill> getBills(Users user) {
+        return billRepository.findAllByBookingUsers(user);
     }
 }

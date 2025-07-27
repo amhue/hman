@@ -86,7 +86,7 @@ public class UsersService {
         return tableBookingRepository.findAllByBookingUsers(user)
             .stream()
             .filter(table
-                    -> table.getStartTime().isAfter(
+                    -> table.getEndTime().isAfter(
                         LocalDateTime.now().minusHours(5).minusMinutes(30)))
             .map(table
                  -> new TableBookingDTO(table.getStartTime(),

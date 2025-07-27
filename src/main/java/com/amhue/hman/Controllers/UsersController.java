@@ -1,5 +1,9 @@
 package com.amhue.hman.Controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/users")
@@ -56,6 +61,9 @@ public class UsersController {
 
     @GetMapping("/auth")
     public Users getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        if (oAuth2User == null) {
+            throw new IllegalStateException("Authentication token is null!");
+        }
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
@@ -128,5 +136,58 @@ public class UsersController {
                                             oAuth2User.getAttribute("email"));
         }
         return usersService.getBills(user.get());
+    }
+
+    @PostMapping("/profile")
+    public void
+    updateProfile(@RequestParam String name, @RequestParam String phone,
+                  @RequestParam(value = "document",
+                                required = false) MultipartFile document,
+                  @AuthenticationPrincipal OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttribute("email");
+        Optional<Users> user = usersRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            throw new IllegalStateException("User not found!" + email);
+        }
+
+        Users userObj = user.get();
+        userObj.setName(name);
+        userObj.setPhone(phone);
+
+        if (document != null && !document.isEmpty()) {
+            if (!document.getContentType().equals("application/pdf")) {
+                throw new IllegalStateException("Wrong file type");
+            }
+            try {
+                System.out.println(document.getBytes() + " " +
+                                   document.getOriginalFilename());
+
+                File uploadsDir = new File("uploads");
+                if (!uploadsDir.exists()) {
+                    uploadsDir.mkdirs();
+                }
+
+                File file = new File("uploads/" + userObj.getId() + ".pdf");
+
+                if (file.exists()) {
+                    file.delete();
+                }
+
+                file.createNewFile();
+
+                try (OutputStream os = new FileOutputStream(file)) {
+                    os.write(document.getBytes());
+                }
+
+                userObj.setDocName(document.getOriginalFilename());
+                userObj.setDocType(document.getContentType());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("Could not upload file");
+            }
+        }
+
+        usersRepository.save(userObj);
     }
 }

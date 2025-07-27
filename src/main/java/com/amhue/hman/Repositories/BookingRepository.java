@@ -14,4 +14,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findByRoomAndEndDateGreaterThanAndStartDateLessThan(
         Room room, LocalDate start, LocalDate end);
     Optional<Booking> findById(@NonNull Integer id);
+
+    List<Booking> findAllByStartDateAndCheckinNotifiedIsTrue(LocalDate t);
+
+    List<Booking> findAllByEndDateAndCheckoutNotifiedIsTrue(LocalDate t);
 }

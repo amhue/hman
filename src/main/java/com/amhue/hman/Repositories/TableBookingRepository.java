@@ -15,4 +15,9 @@ public interface TableBookingRepository
     findByTableAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(
         Table table, LocalDateTime start, LocalDateTime end);
     List<TableBooking> findAllByBookingUsers(Users user);
+
+    // check if start time is in a specific time interval
+    List<TableBooking>
+    findAllByStartTimeGreaterThanAndStartTimeLessThanEqual(LocalDateTime t1,
+                                                           LocalDateTime t2);
 }
