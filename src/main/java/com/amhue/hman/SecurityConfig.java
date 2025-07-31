@@ -16,11 +16,11 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
                 auth
-                -> auth.requestMatchers("/login", "/api/rooms", "/api/booking",
-                                        "/api/users", "/api/table",
-                                        "/api/table-booking", "/api/users/*",
-                                        "/api/rooms/*", "/api/table/*", "/api/admin/*",
-                                        "/api/admin")
+                -> auth.requestMatchers(
+                           "/login", "/api/rooms", "/api/booking", "/api/users",
+                           "/api/table", "/api/table-booking", "/api/users/*",
+                           "/api/rooms/*", "/api/table/*", "/api/admin/*",
+                           "/api/admin", "/api/checkout", "/api/review")
                        .permitAll()
                        .anyRequest()
                        .authenticated())

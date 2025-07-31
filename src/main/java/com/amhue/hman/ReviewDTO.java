@@ -2,24 +2,24 @@ package com.amhue.hman;
 
 public class ReviewDTO {
     private String review;
-    private String name;
-    private Integer room;
+    private Integer userID;
+    private Integer bookingID;
 
     public String getReview() { return review; }
 
     public void setReview(String review) { this.review = review; }
 
-    public String getName() { return name; }
+    public Integer getUserID() { return userID; }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(Integer userID) { this.userID = userID; }
 
-    public Integer getRoom() { return room; }
+    public Integer getBookingID() { return bookingID; }
 
-    public void setRoom(Integer room) { this.room = room; }
+    public void setBookingID(Integer bookingID) { this.bookingID = bookingID; }
 
-    public ReviewDTO(String review, String name, Integer room) {
+    public ReviewDTO(String review, Integer userID, Integer bookingID) {
         this.review = review;
-        this.name = name;
-        this.room = room;
+        this.userID = userID;
+        this.bookingID = bookingID;
     }
 }

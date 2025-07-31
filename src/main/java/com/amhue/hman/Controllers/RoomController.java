@@ -57,4 +57,9 @@ public class RoomController {
 
         roomService.addRoom(room);
     }
+
+    // @DeleteMapping("/delete")
+    // public ResponseEntity<?> deleteRoom(@RequestParam Integer roomNo) {
+    //     roomService;
+    // }
 }

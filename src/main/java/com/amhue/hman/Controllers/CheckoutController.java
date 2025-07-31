@@ -1,47 +1,46 @@
-// package com.amhue.hman.Controllers;
+package com.amhue.hman.Controllers;
 
-// import java.util.Map;
+import java.util.Map;
 
-// import com.stripe.Stripe;
-// import com.stripe.exception.StripeException;
-// import com.stripe.param.checkout.SessionCreateParams;
+import com.amhue.hman.StripeDTO;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 
-// import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-// import jakarta.annotation.PostConstruct;
+@RestController
+@RequestMapping("/api/checkout")
+public class CheckoutController {
+    @Value("${stripe.api.key}") private String stripeApiKey;
 
-// @RestController
-// @RequestMapping("/api/checkout")
-// public class CheckoutController {
-//     @Value("${stripe.api.key}") private String stripeSecretKey;
+    @PostMapping
+    public ResponseEntity<?> pay(@RequestBody StripeDTO stripeDTO) {
+        Stripe.apiKey = stripeApiKey;
+        System.out.println("Start");
+        try {
+            PaymentIntentCreateParams params =
+                PaymentIntentCreateParams.builder()
+                    .setAmount(stripeDTO.getAmount())
+                    .setCurrency(stripeDTO.getCurrency())
+                    .build();
 
-//     @PostConstruct
-//     public void init() {
-//         Stripe.apiKey = stripeSecretKey;
-//     }
+            PaymentIntent intent = PaymentIntent.create(params);
 
-//     @PostMapping
-//     public ResponseEntity<Map<String, Object>>
-//     checkout(@RequestBody Map<String, Object> data) {
-//         try {
-//             Long amount = Long.parseLong(data.get("amount").toString());
-
-//             SessionCreateParams params =
-//                 SessionCreateParams.builder()
-//                     .setMode(SessionCreateParams.Mode.PAYMENT)
-//                     .setSuccessUrl("http://localhost:5173/success")
-//                     .setCancelUrl("http://localhost:5173/cancel")
-//                     .addLineItem(SessionCreateParams.LineItem.builder())
-
-//                         return ResponseEntity.ok();
-//         } catch (StripeException e) {
-//             return ResponseEntity.internalServerError().body(
-//                 Map.of("error", e.getMessage()));
-//         }
-//     }
-// }
+            System.out.println("Processed stripe");
+            return ResponseEntity.ok(
+                Map.of("client_secret", intent.getClientSecret()));
+        } catch (StripeException e) {
+            e.printStackTrace();
+            System.out.println("Error stripe");
+            return ResponseEntity.status(500).body(
+                Map.of("error", e.getMessage()));
+        }
+    }
+}

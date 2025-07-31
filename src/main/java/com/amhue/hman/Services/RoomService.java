@@ -33,4 +33,6 @@ public class RoomService {
             .filter(room -> bookingService.isAvailable(room, start, end))
             .collect(Collectors.toList());
     }
+
+    public void deleteRoom(Integer roomNo) throws RuntimeException {}
 }
