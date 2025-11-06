@@ -54,7 +54,6 @@ public class SecurityConfig {
             .logout(logout
                     -> logout.logoutSuccessUrl(clientUrl + "/login")
                            .logoutUrl("/logout"));
-        System.out.println("Hello");
         return httpSecurity.build();
     }
 }

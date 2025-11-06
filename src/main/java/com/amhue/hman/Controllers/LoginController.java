@@ -15,7 +15,6 @@ public class LoginController {
 
         if (auth != null && auth.isAuthenticated() &&
             !(auth instanceof AnonymousAuthenticationToken)) {
-            System.out.println("hello");
             return "redirect:/";
         }
 
