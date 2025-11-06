@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.amhue.hman.RoomDTO;
-import com.amhue.hman.TableDTO;
+import com.amhue.hman.DTOs.RoomDTO;
+import com.amhue.hman.DTOs.TableDTO;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.RoomRepository;
 import com.amhue.hman.Repositories.TableRepository;

@@ -1,4 +1,6 @@
-package com.amhue.hman;
+package com.amhue.hman.DTOs;
+
+import com.amhue.hman.RoomType;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

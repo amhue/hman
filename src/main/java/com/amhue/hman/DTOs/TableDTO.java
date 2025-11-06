@@ -1,4 +1,4 @@
-package com.amhue.hman;
+package com.amhue.hman.DTOs;
 
 public class TableDTO {
     private Integer tableNo;

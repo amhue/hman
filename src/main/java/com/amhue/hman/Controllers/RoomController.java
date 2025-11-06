@@ -3,7 +3,7 @@ package com.amhue.hman.Controllers;
 import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.RoomSearchDTO;
+import com.amhue.hman.DTOs.RoomSearchDTO;
 import com.amhue.hman.Entities.Room;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.UsersRepository;

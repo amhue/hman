@@ -7,8 +7,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.BookingDTO;
-import com.amhue.hman.TableBookingDTO;
+import com.amhue.hman.DTOs.BookingDTO;
+import com.amhue.hman.DTOs.TableBookingDTO;
 import com.amhue.hman.Entities.Bill;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.UsersRepository;

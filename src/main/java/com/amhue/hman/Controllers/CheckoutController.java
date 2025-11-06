@@ -2,7 +2,7 @@ package com.amhue.hman.Controllers;
 
 import java.util.Map;
 
-import com.amhue.hman.StripeDTO;
+import com.amhue.hman.DTOs.StripeDTO;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;

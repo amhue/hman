@@ -1,6 +1,8 @@
-package com.amhue.hman;
+package com.amhue.hman.DTOs;
 
 import java.time.LocalDate;
+
+import com.amhue.hman.RoomType;
 
 public class RoomSearchDTO {
     private RoomType roomType;

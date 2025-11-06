@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.BookingDTO;
 import com.amhue.hman.RoomType;
+import com.amhue.hman.DTOs.BookingDTO;
 import com.amhue.hman.Entities.Booking;
 import com.amhue.hman.Entities.Room;
 import com.amhue.hman.Entities.Users;

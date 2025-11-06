@@ -3,7 +3,7 @@ package com.amhue.hman.Controllers;
 import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.ReviewDTO;
+import com.amhue.hman.DTOs.ReviewDTO;
 import com.amhue.hman.Entities.Booking;
 import com.amhue.hman.Entities.Review;
 import com.amhue.hman.Entities.Users;

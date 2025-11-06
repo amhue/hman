@@ -1,4 +1,4 @@
-package com.amhue.hman;
+package com.amhue.hman.DTOs;
 
 public class ReviewDTO {
     private String review;
