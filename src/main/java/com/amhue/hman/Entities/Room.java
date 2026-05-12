@@ -1,7 +1,6 @@
 package com.amhue.hman.Entities;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.amhue.hman.RoomType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -26,7 +25,11 @@ public class Room {
     @JsonManagedReference
     private List<Booking> booking;
 
+    private String description;
+
     @Enumerated(EnumType.STRING) RoomType roomType;
+
+    private Integer price;
 
     public Room() {}
 
@@ -44,30 +47,82 @@ public class Room {
 
     public void setBooking(List<Booking> booking) { this.booking = booking; }
 
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public RoomType getRoomType() { return roomType; }
 
     public void setRoomType(RoomType roomType) { this.roomType = roomType; }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Room room = (Room)o;
-        return Objects.equals(id, room.id) &&
-            Objects.equals(roomNumber, room.roomNumber) &&
-            Objects.equals(booking, room.booking) && roomType == room.roomType;
-    }
+    public Integer getPrice() { return price; }
+
+    public void setPrice(Integer price) { this.price = price; }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roomNumber, booking, roomType);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result =
+            prime * result + ((roomNumber == null) ? 0 : roomNumber.hashCode());
+        result = prime * result + ((booking == null) ? 0 : booking.hashCode());
+        result = prime * result +
+                 ((description == null) ? 0 : description.hashCode());
+        result =
+            prime * result + ((roomType == null) ? 0 : roomType.hashCode());
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Room other = (Room)obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (roomNumber == null) {
+            if (other.roomNumber != null)
+                return false;
+        } else if (!roomNumber.equals(other.roomNumber))
+            return false;
+        if (booking == null) {
+            if (other.booking != null)
+                return false;
+        } else if (!booking.equals(other.booking))
+            return false;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (roomType != other.roomType)
+            return false;
+        if (price == null) {
+            if (other.price != null)
+                return false;
+        } else if (!price.equals(other.price))
+            return false;
+        return true;
     }
 
     public Room(Integer id, Integer roomNumber, List<Booking> booking,
-                RoomType roomType) {
+                String description, RoomType roomType, Integer price) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.booking = booking;
+        this.description = description;
         this.roomType = roomType;
+        this.price = price;
     }
 }

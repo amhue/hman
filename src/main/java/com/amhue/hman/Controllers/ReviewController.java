@@ -11,6 +11,7 @@ import com.amhue.hman.Repositories.BookingRepository;
 import com.amhue.hman.Repositories.ReviewRepository;
 import com.amhue.hman.Repositories.UsersRepository;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,17 +35,17 @@ public class ReviewController {
     }
 
     @PostMapping
-    public void addReview(@RequestBody ReviewDTO reviewDTO) {
+    public ResponseEntity<?> addReview(@RequestBody ReviewDTO reviewDTO) {
         Review review = new Review();
         Optional<Users> user = usersRepository.findById(reviewDTO.getUserID());
         if (user.isEmpty()) {
-            throw new IllegalStateException(
+            return ResponseEntity.badRequest().body(
                 "The given user id does not exist!");
         }
         Optional<Booking> booking =
             bookingRepository.findById(reviewDTO.getBookingID());
         if (booking.isEmpty()) {
-            throw new IllegalStateException(
+            return ResponseEntity.badRequest().body(
                 "The given booking does not exist!");
         }
 
@@ -53,27 +54,32 @@ public class ReviewController {
         review.setReview(reviewDTO.getReview());
 
         reviewRepository.save(review);
+        return ResponseEntity.ok().body("Success!");
     }
 
     @GetMapping("/room")
-    public List<ReviewDTO> getReviewsByRoom(@RequestParam Integer roomNo) {
-        return reviewRepository.findAllByBooking_Room_RoomNumber(roomNo)
-            .stream()
-            .map(
-                review
-                -> new ReviewDTO(review.getReview(), review.getUser().getId(),
-                                 review.getBooking().getRoom().getRoomNumber()))
-            .toList();
+    public ResponseEntity<List<ReviewDTO>>
+    getReviewsByRoom(@RequestParam Integer roomNo) {
+        return ResponseEntity.ok().body(
+            reviewRepository.findAllByBooking_Room_RoomNumber(roomNo)
+                .stream()
+                .map(review
+                     -> new ReviewDTO(
+                         review.getReview(), review.getUser().getId(),
+                         review.getBooking().getRoom().getRoomNumber()))
+                .toList());
     }
 
     @GetMapping("/user")
-    public List<ReviewDTO> getReviesByUser(@RequestParam Integer userID) {
-        return reviewRepository.findAllByUserId(userID)
-            .stream()
-            .map(
-                review
-                -> new ReviewDTO(review.getReview(), review.getUser().getId(),
-                                 review.getBooking().getRoom().getRoomNumber()))
-            .toList();
+    public ResponseEntity<List<ReviewDTO>>
+    getReviesByUser(@RequestParam Integer userID) {
+        return ResponseEntity.ok().body(
+            reviewRepository.findAllByUserId(userID)
+                .stream()
+                .map(review
+                     -> new ReviewDTO(
+                         review.getReview(), review.getUser().getId(),
+                         review.getBooking().getRoom().getRoomNumber()))
+                .toList());
     }
 }

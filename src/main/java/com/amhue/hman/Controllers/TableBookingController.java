@@ -11,6 +11,7 @@ import com.amhue.hman.Repositories.BookingRepository;
 import com.amhue.hman.Repositories.TableRepository;
 import com.amhue.hman.Services.TableBookingService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,12 +34,13 @@ public class TableBookingController {
     }
 
     @GetMapping
-    public List<TableBooking> getTableBookings() {
-        return tableBookingService.getTableBookings();
+    public ResponseEntity<List<TableBooking>> getTableBookings() {
+        return ResponseEntity.ok().body(tableBookingService.getTableBookings());
     }
 
     @PostMapping
-    public void addTableBooking(@RequestBody TableBookingDTO tableBookingDTO) {
+    public ResponseEntity<?>
+    addTableBooking(@RequestBody TableBookingDTO tableBookingDTO) {
         Integer bookingId = tableBookingDTO.getBookingID();
         Integer tableNumber = tableBookingDTO.getTableNumber();
 
@@ -46,19 +48,20 @@ public class TableBookingController {
         Optional<Table> table = tableRepository.findByTableNumber(tableNumber);
 
         if (booking.isEmpty()) {
-            throw new IllegalStateException(
+            return ResponseEntity.badRequest().body(
                 "The given booking ID is not valid!");
         } else if (table.isEmpty()) {
-            throw new IllegalStateException(
+            return ResponseEntity.badRequest().body(
                 "The given Table number was not valid!");
         } else if (tableBookingDTO.getEndTime().isBefore(
                        tableBookingDTO.getStartTime())) {
-            throw new IllegalStateException("End time is before start time!");
+            return ResponseEntity.badRequest().body(
+                "End time is before start time!");
         } else if (tableBookingDTO.getStartTime().isBefore(
                        booking.get().getStartDate().atTime(6, 59)) ||
                    tableBookingDTO.getEndTime().isAfter(
                        booking.get().getEndDate().atTime(7, 0))) {
-            throw new IllegalStateException(
+            return ResponseEntity.badRequest().body(
                 "The table booking time must fall within the booking date "
                 + "range.");
         } else {
@@ -66,5 +69,7 @@ public class TableBookingController {
                 tableBookingDTO.getStartTime(), tableBookingDTO.getEndTime(),
                 table.get().getAmount(), booking.get(), table.get());
         }
+
+        return ResponseEntity.ok().body("Success!");
     }
 }

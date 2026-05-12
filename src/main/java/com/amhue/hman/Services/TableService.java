@@ -32,4 +32,16 @@ public class TableService {
             .filter(table -> table.getCapacity() == capacity)
             .collect(Collectors.toList());
     }
+
+    public void deleteTable(Integer tableNo) throws IllegalArgumentException {
+        var table = tableRepository.findByTableNumber(tableNo);
+
+        var hasBookings = table.get().getTableBookings().stream().anyMatch(
+            booking -> !booking.getStartTime().isBefore(LocalDateTime.now()));
+
+        if (hasBookings)
+            throw new IllegalStateException("Table has bookings present");
+
+        tableRepository.delete(table.get());
+    }
 }

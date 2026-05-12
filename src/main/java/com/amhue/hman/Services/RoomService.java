@@ -34,5 +34,20 @@ public class RoomService {
             .collect(Collectors.toList());
     }
 
-    public void deleteRoom(Integer roomNo) throws RuntimeException {}
+    public void deleteRoom(Integer roomNo) throws IllegalStateException {
+        var roomId = roomRepository.findByRoomNumber(roomNo).get().getId();
+
+        var hasBookings =
+            roomRepository.findById(roomId)
+                .get()
+                .getBooking()
+                .stream()
+                .anyMatch(booking
+                          -> !booking.getStartDate().isBefore(LocalDate.now()));
+
+        if (hasBookings)
+            throw new IllegalStateException("Room has bookings present");
+
+        roomRepository.deleteById(roomId);
+    }
 }

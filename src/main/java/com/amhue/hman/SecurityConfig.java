@@ -52,7 +52,7 @@ public class SecurityConfig {
                 oauth
                 -> oauth.loginPage("/login").defaultSuccessUrl(clientUrl, true))
             .logout(logout
-                    -> logout.logoutSuccessUrl(clientUrl + "/login")
+                    -> logout.logoutSuccessUrl(clientUrl + "login")
                            .logoutUrl("/logout"));
         return httpSecurity.build();
     }

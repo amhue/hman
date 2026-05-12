@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.RoomType;
 import com.amhue.hman.DTOs.BookingDTO;
 import com.amhue.hman.Entities.Booking;
 import com.amhue.hman.Entities.Room;
@@ -16,6 +15,7 @@ import com.amhue.hman.Services.BillService;
 import com.amhue.hman.Services.BookingService;
 import com.amhue.hman.Services.UsersService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,27 +48,22 @@ public class BookingController {
     }
 
     @PostMapping
-    public void bookRoom(@RequestBody BookingDTO bookingDTO) {
+    public ResponseEntity<?> bookRoom(@RequestBody BookingDTO bookingDTO) {
         Optional<Room> room =
             roomRepository.findByRoomNumber(bookingDTO.getRoomNo());
         Optional<Users> user = usersRepository.findById(bookingDTO.getUserID());
         if (room.isEmpty()) {
-            throw new IllegalStateException("Room number not found!");
+            return ResponseEntity.badRequest().body("Room number not found!");
         } else if (user.isEmpty()) {
-            throw new IllegalStateException("User not found!");
+            return ResponseEntity.badRequest().body("User not found!");
         } else {
-            RoomType roomType = room.get().getRoomType();
             Booking booking = bookingService.bookRoom(user.get(), room.get(),
                                                       bookingDTO.getStart(),
                                                       bookingDTO.getEnd());
 
             int daysBooked = (int)ChronoUnit.DAYS.between(bookingDTO.getStart(),
                                                           bookingDTO.getEnd());
-            Integer roomPrice = switch (roomType) {
-                case SINGLE -> 1000;
-                case DOUBLE -> 1500;
-                case DELUXE -> 2500;
-            } * daysBooked;
+            Integer roomPrice = room.get().getPrice() * daysBooked;
 
             billService.addBill(
                 "Accommodation cost " +
@@ -84,25 +79,28 @@ public class BookingController {
             room.get().setBooking(bookings);
             roomRepository.save(room.get());
         }
+
+        return ResponseEntity.ok().body("Success!");
     }
 
     @GetMapping
-    public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        return ResponseEntity.ok().body(bookingService.getAllBookings());
     }
 
     @DeleteMapping("/{id}")
-    public List<BookingDTO>
+    public ResponseEntity<?>
     deleteBooking(@AuthenticationPrincipal OAuth2User oAuth2User,
                   @PathVariable Integer id) {
         String email = oAuth2User.getAttribute("email");
         Optional<Users> user = usersRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            throw new IllegalStateException("User with email " + email +
-                                            " not found!");
+            return ResponseEntity.badRequest().body("User with email " + email +
+                                                    " not found!");
         }
         bookingService.deleteBooking(id);
-        return usersService.getUpcomingBookings(user.get());
+        return ResponseEntity.ok().body(
+            usersService.getUpcomingBookings(user.get()));
     }
 }

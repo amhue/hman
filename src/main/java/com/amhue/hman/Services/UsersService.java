@@ -49,8 +49,8 @@ public class UsersService {
             .map(booking
                  -> new BookingDTO(booking.getId(), booking.getUsers().getId(),
                                    booking.getRoom().getRoomNumber(),
-                                   booking.getStartDate(),
-                                   booking.getEndDate()))
+                                   booking.getStartDate(), booking.getEndDate(),
+                                   booking.getRoom().getRoomType()))
             .collect(Collectors.toList());
     }
 
@@ -63,8 +63,8 @@ public class UsersService {
             .map(booking
                  -> new BookingDTO(booking.getId(), booking.getUsers().getId(),
                                    booking.getRoom().getRoomNumber(),
-                                   booking.getStartDate(),
-                                   booking.getEndDate()))
+                                   booking.getStartDate(), booking.getEndDate(),
+                                   booking.getRoom().getRoomType()))
             .collect(Collectors.toList());
     }
 
@@ -77,8 +77,8 @@ public class UsersService {
             .map(booking
                  -> new BookingDTO(booking.getId(), booking.getUsers().getId(),
                                    booking.getRoom().getRoomNumber(),
-                                   booking.getStartDate(),
-                                   booking.getEndDate()))
+                                   booking.getStartDate(), booking.getEndDate(),
+                                   booking.getRoom().getRoomType()))
             .collect(Collectors.toList());
     }
 

@@ -4,16 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Optional;
 
-import com.amhue.hman.DTOs.BookingDTO;
-import com.amhue.hman.DTOs.TableBookingDTO;
-import com.amhue.hman.Entities.Bill;
 import com.amhue.hman.Entities.Users;
 import com.amhue.hman.Repositories.UsersRepository;
 import com.amhue.hman.Services.UsersService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,40 +35,41 @@ public class UsersController {
     }
 
     @GetMapping
-    public Users getUserFromEmail(@RequestParam String email) {
+    public ResponseEntity<?> getUserFromEmail(@RequestParam String email) {
         Optional<Users> user = usersRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            throw new IllegalStateException("User with email does not exist!");
-        } else {
-            return user.get();
+            return ResponseEntity.badRequest().body(
+                "User with email does not exist!");
         }
+        return ResponseEntity.ok().body(user.get());
     }
 
     @GetMapping("{id}")
-    public Users getUserFromId(@PathVariable Integer id) {
+    public ResponseEntity<?> getUserFromId(@PathVariable Integer id) {
         Optional<Users> user = usersRepository.findById(id);
 
         if (user.isEmpty()) {
-            throw new IllegalStateException("User id is not valid!");
-        } else {
-            return user.get();
+            return ResponseEntity.badRequest().body("User id is not valid!");
         }
+        return ResponseEntity.ok().body(user.get());
     }
 
     @GetMapping("/auth")
-    public Users getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public ResponseEntity<?>
+    getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
         if (oAuth2User == null) {
-            throw new IllegalStateException("Authentication token is null!");
+            return ResponseEntity.badRequest().body(
+                "Authentication token is null!");
         }
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found! " +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found! " + oAuth2User.getAttribute("email"));
         }
 
-        return user.get();
+        return ResponseEntity.ok().body(user.get());
     }
 
     @PostMapping("/add")
@@ -80,66 +78,70 @@ public class UsersController {
     }
 
     @GetMapping("/current")
-    public List<BookingDTO>
+    public ResponseEntity<?>
     getCurrentBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found! " +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found! " + oAuth2User.getAttribute("email"));
         }
-        return usersService.getCurrentBookings(user.get());
+        return ResponseEntity.ok().body(
+            usersService.getCurrentBookings(user.get()));
     }
 
     @GetMapping("/upcoming")
-    public List<BookingDTO>
+    public ResponseEntity<?>
     getUpcomingBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found! " +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found! " + oAuth2User.getAttribute("email"));
         }
-        return usersService.getUpcomingBookings(user.get());
+        return ResponseEntity.ok().body(
+            usersService.getUpcomingBookings(user.get()));
     }
 
     @GetMapping("/past")
-    public List<BookingDTO>
+    public ResponseEntity<?>
     getPastBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found! " +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found! " + oAuth2User.getAttribute("email"));
         }
-        return usersService.getPastBookings(user.get());
+        return ResponseEntity.ok().body(
+            usersService.getPastBookings(user.get()));
     }
 
     @GetMapping("/tables")
-    public List<TableBookingDTO>
+    public ResponseEntity<?>
     getTables(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found! " +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found! " + oAuth2User.getAttribute("email"));
         }
-        return usersService.getTables(user.get());
+        return ResponseEntity.ok().body(usersService.getTables(user.get()));
     }
 
     @GetMapping("/bills")
-    public List<Bill> getBills(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public ResponseEntity<?>
+    getBills(@AuthenticationPrincipal OAuth2User oAuth2User) {
         Optional<Users> user =
             usersRepository.findByEmail(oAuth2User.getAttribute("email"));
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found!" +
-                                            oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body(
+                "User not found!" + oAuth2User.getAttribute("email"));
         }
-        return usersService.getBills(user.get());
+        return ResponseEntity.ok().body(usersService.getBills(user.get()));
     }
 
     @PostMapping("/profile")
-    public void
+    public ResponseEntity<?>
     updateProfile(@RequestParam String name, @RequestParam String phone,
                   @RequestParam(value = "document",
                                 required = false) MultipartFile document,
@@ -148,7 +150,7 @@ public class UsersController {
         Optional<Users> user = usersRepository.findByEmail(email);
 
         if (user.isEmpty()) {
-            throw new IllegalStateException("User not found!" + email);
+            return ResponseEntity.badRequest().body("User not found!" + email);
         }
 
         Users userObj = user.get();
@@ -157,7 +159,7 @@ public class UsersController {
 
         if (document != null && !document.isEmpty()) {
             if (!document.getContentType().equals("application/pdf")) {
-                throw new IllegalStateException("Wrong file type");
+                return ResponseEntity.badRequest().body("Wrong file type");
             }
             try {
                 System.out.println(document.getBytes() + " " +
@@ -184,10 +186,12 @@ public class UsersController {
                 userObj.setDocType(document.getContentType());
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new IllegalStateException("Could not upload file");
+                return ResponseEntity.badRequest().body(
+                    "Could not upload file");
             }
         }
 
         usersRepository.save(userObj);
+        return ResponseEntity.ok().body("Success");
     }
 }

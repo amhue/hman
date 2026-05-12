@@ -22,7 +22,7 @@ public class Table {
     @Cascade(CascadeType.ALL)
     private List<TableBooking> tableBookings;
 
-    @Column(unique = true) private Integer tableNumber;
+    @Column(unique = true, nullable = false) private Integer tableNumber;
     private Integer amount;
     private Integer capacity;
 
