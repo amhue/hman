@@ -8,7 +8,7 @@ import com.amhue.hman.Services.BillService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +28,9 @@ public class BillController {
 
     @GetMapping
     public ResponseEntity<?>
-    getBills(@AuthenticationPrincipal OAuth2User oAuth2User,
+    getBills(@AuthenticationPrincipal UserDetails userDetails,
              @RequestParam(required = false) Integer userId) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {

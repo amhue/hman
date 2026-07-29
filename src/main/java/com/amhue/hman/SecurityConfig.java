@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -19,6 +20,14 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
     @Value("${client.url}") private String clientUrl;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final OAuth2Handler oAuth2Handler;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          OAuth2Handler oauthAuth2Handler) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.oAuth2Handler = oauthAuth2Handler;
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -50,10 +59,9 @@ public class SecurityConfig {
                 }))
             .oauth2Login(
                 oauth
-                -> oauth.loginPage("/login").defaultSuccessUrl(clientUrl, true))
-            .logout(logout
-                    -> logout.logoutSuccessUrl(clientUrl + "login")
-                           .logoutUrl("/logout"));
+                -> oauth.loginPage("/login").successHandler(oAuth2Handler))
+            .addFilterBefore(jwtAuthFilter,
+                             UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

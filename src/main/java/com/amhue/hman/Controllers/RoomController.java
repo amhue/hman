@@ -11,7 +11,7 @@ import com.amhue.hman.Services.RoomService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,9 +47,9 @@ public class RoomController {
 
     @PostMapping("/add")
     public ResponseEntity<?>
-    addRoom(@AuthenticationPrincipal OAuth2User oAuth2User,
+    addRoom(@AuthenticationPrincipal UserDetails userDetails,
             @RequestBody Room room) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {
@@ -68,9 +68,9 @@ public class RoomController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?>
-    deleteRoom(@AuthenticationPrincipal OAuth2User oAuth2User,
+    deleteRoom(@AuthenticationPrincipal UserDetails userDetails,
                @RequestParam Integer roomNo) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {

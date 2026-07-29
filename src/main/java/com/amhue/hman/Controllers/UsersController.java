@@ -12,7 +12,7 @@ import com.amhue.hman.Services.UsersService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,16 +57,16 @@ public class UsersController {
 
     @GetMapping("/auth")
     public ResponseEntity<?>
-    getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
-        if (oAuth2User == null) {
+    getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return ResponseEntity.badRequest().body(
                 "Authentication token is null!");
         }
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found! " + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found! " +
+                                                    userDetails.getUsername());
         }
 
         return ResponseEntity.ok().body(user.get());
@@ -79,12 +79,12 @@ public class UsersController {
 
     @GetMapping("/current")
     public ResponseEntity<?>
-    getCurrentBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    getCurrentBookings(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found! " + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found! " +
+                                                    userDetails.getUsername());
         }
         return ResponseEntity.ok().body(
             usersService.getCurrentBookings(user.get()));
@@ -92,12 +92,12 @@ public class UsersController {
 
     @GetMapping("/upcoming")
     public ResponseEntity<?>
-    getUpcomingBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    getUpcomingBookings(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found! " + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found! " +
+                                                    userDetails.getUsername());
         }
         return ResponseEntity.ok().body(
             usersService.getUpcomingBookings(user.get()));
@@ -105,12 +105,12 @@ public class UsersController {
 
     @GetMapping("/past")
     public ResponseEntity<?>
-    getPastBookings(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    getPastBookings(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found! " + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found! " +
+                                                    userDetails.getUsername());
         }
         return ResponseEntity.ok().body(
             usersService.getPastBookings(user.get()));
@@ -118,24 +118,24 @@ public class UsersController {
 
     @GetMapping("/tables")
     public ResponseEntity<?>
-    getTables(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    getTables(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found! " + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found! " +
+                                                    userDetails.getUsername());
         }
         return ResponseEntity.ok().body(usersService.getTables(user.get()));
     }
 
     @GetMapping("/bills")
     public ResponseEntity<?>
-    getBills(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    getBills(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<Users> user =
-            usersRepository.findByEmail(oAuth2User.getAttribute("email"));
+            usersRepository.findByEmail(userDetails.getUsername());
         if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                "User not found!" + oAuth2User.getAttribute("email"));
+            return ResponseEntity.badRequest().body("User not found!" +
+                                                    userDetails.getUsername());
         }
         return ResponseEntity.ok().body(usersService.getBills(user.get()));
     }
@@ -145,8 +145,8 @@ public class UsersController {
     updateProfile(@RequestParam String name, @RequestParam String phone,
                   @RequestParam(value = "document",
                                 required = false) MultipartFile document,
-                  @AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
+                  @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
         Optional<Users> user = usersRepository.findByEmail(email);
 
         if (user.isEmpty()) {

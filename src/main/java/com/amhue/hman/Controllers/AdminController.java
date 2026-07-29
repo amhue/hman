@@ -18,7 +18,7 @@ import com.amhue.hman.Repositories.UsersRepository;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,8 +64,8 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<?>
     getUsers(@RequestParam(defaultValue = "") String userString,
-             @AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
+             @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {
@@ -94,8 +94,8 @@ public class AdminController {
     public ResponseEntity<?>
     getRooms(@RequestParam(required = false) Boolean occupied,
              @RequestParam(required = false) String roomNo,
-             @AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
+             @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {
@@ -148,8 +148,8 @@ public class AdminController {
     public ResponseEntity<?>
     getTables(@RequestParam(required = false) String tableNo,
               @RequestParam(required = false) Boolean occupied,
-              @AuthenticationPrincipal OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
+              @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {
@@ -192,9 +192,9 @@ public class AdminController {
 
     @PostMapping("/make-admin")
     public ResponseEntity<?>
-    makeAdmin(@AuthenticationPrincipal OAuth2User oAuth2User,
+    makeAdmin(@AuthenticationPrincipal UserDetails userDetails,
               @RequestParam Integer userID) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {

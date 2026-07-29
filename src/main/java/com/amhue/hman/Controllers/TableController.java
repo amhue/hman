@@ -11,7 +11,7 @@ import com.amhue.hman.Services.TableService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,9 +48,9 @@ public class TableController {
 
     @PostMapping("/add")
     public ResponseEntity<?>
-    addTable(@AuthenticationPrincipal OAuth2User oAuth2User,
+    addTable(@AuthenticationPrincipal UserDetails userDetails,
              @RequestBody Table table) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {
@@ -69,9 +69,9 @@ public class TableController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?>
-    deleteTable(@AuthenticationPrincipal OAuth2User oAuth2User,
+    deleteTable(@AuthenticationPrincipal UserDetails userDetails,
                 @RequestParam Integer tableNo) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> userDb = usersRepository.findByEmail(email);
 
         if (userDb.isEmpty()) {

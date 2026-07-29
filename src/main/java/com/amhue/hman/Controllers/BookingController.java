@@ -17,7 +17,7 @@ import com.amhue.hman.Services.UsersService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,9 +90,9 @@ public class BookingController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?>
-    deleteBooking(@AuthenticationPrincipal OAuth2User oAuth2User,
+    deleteBooking(@AuthenticationPrincipal UserDetails userDetails,
                   @PathVariable Integer id) {
-        String email = oAuth2User.getAttribute("email");
+        String email = userDetails.getUsername();
         Optional<Users> user = usersRepository.findByEmail(email);
 
         if (user.isEmpty()) {
